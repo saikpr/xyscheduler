@@ -1,6 +1,6 @@
 import json
 from bottle import route, run, request, abort
-import xyvar
+from xyvar import hostname,d_ID,c_ID
 @route('/run', method='POST')
 def run_job():
     data = request.body.readline().decode('utf-8')
@@ -17,14 +17,9 @@ def run_job():
     noofargs=entity['NumArgs']
     for i in xrange(noofargs):
         jobarg[i]=entity['ARG-'+str(i)]
-    
 
-    if not entity.has_key('_id'):
-        abort(400, 'No _id specified')
-    try:
-        print entity
-    except ValidationError as ve:
-        abort(400, str(ve)) 
+
+ 
 @route('/rm/:id1', method='GET')
 def rm_doc(id1):
     return "Deleted"
