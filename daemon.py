@@ -1,6 +1,7 @@
 import json
 from bottle import route, run, request, abort
 from xyvar import hostname,d_ID,c_ID
+from subprocess import Popen
 @route('/run', method='POST')
 def run_job():
     data = request.body.readline().decode('utf-8')
@@ -15,9 +16,23 @@ def run_job():
         abort(404, 'Wrong cluster?')
 
     noofargs=entity['NumArgs']
+    jobarg =['/bin/sh','-c']
     for i in xrange(noofargs):
-        jobarg[i]=entity['ARG-'+str(i)]
-
+        jobarg += entity['ARG-'+str(i)]
+    job_popen = Popen(jobarg,
+        bufsize=-1,
+        executable=None,
+        stdin=None,
+        stdout=None,
+        stderr=None,
+        preexec_fn=None,
+        close_fds=False,
+        shell=False,
+        cwd=None,
+        env=None,
+        universal_newlines=False,
+        startupinfo=None,
+        creationflags=0)
 
  
 @route('/rm/:id1', method='GET')
