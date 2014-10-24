@@ -48,15 +48,4 @@ def run_job():
     jobT=jobThread(jobargs,t_ID)
     jobT.start()
 
-    
-    
 
- 
-@route('/rm/:id1', method='GET')
-def rm_doc(id1):
-    return "Deleted"
-@route('/documents/:id', method='GET')
-def get_document(id):
-    if not entity:
-        abort(404, 'No document with id %s' % id)
-    return entity
