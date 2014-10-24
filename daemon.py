@@ -12,11 +12,13 @@ def run_job():
     entity = json.loads(data)
     if (entity['d_ID'] != d_ID )
         abort(404, 'Wrong Daemon')
+
     if (entity['c_ID'] != c_ID )
         abort(404, 'Wrong cluster?')
-
+    t_ID=entity['t_ID'] #task id
     noofargs=entity['NumArgs']
-    jobarg =['/bin/sh','-c']
+    jobarg =['/bin/sh','-c'] #check if safe?
+
     for i in xrange(noofargs):
         jobarg += entity['ARG-'+str(i)]
     job_popen = Popen(jobarg,
@@ -25,10 +27,7 @@ def run_job():
         stdin=None,
         stdout=None,
         stderr=None,
-        preexec_fn=None,
-        close_fds=False,
         shell=False,
-        cwd=None,
         env=None,
         universal_newlines=False,
         startupinfo=None,
