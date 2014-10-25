@@ -24,8 +24,8 @@ class jobThread(threading.Thread):
                                     universal_newlines=False,
                                     startupinfo=None,
                                     creationflags=0)
-        job_popens_all[str(t_ID)]+=job_popen
-        job_popens_live[str(t_ID)]+=job_popen
+        job_popens_all[str(t_ID)]=job_popen
+        job_popens_live[str(t_ID)=job_popen
         job_popen.wait()
         del job_popens_live[str(t_ID)]
         ##call /daemon complete on master
@@ -70,4 +70,5 @@ def check_job(t_ID):
 	    		return_json['RETURN_VAL']=return_val
 	    except KeyError:#if never pushed
 	    	return_json['RETURN_VAL']='NOTFOUND'
+    return return_json
 
