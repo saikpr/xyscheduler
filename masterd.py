@@ -1,7 +1,17 @@
-import json
+import json, httplib
 from bottle import route, run, request, abort
 from xyvar import hostname,d_ID,c_ID,md_ID,slaves
 import subprocess 
+connections={}
+slave_status={}
+def check_slaves():
+    for sl in slaves:
+        temp=connections[sl].request("GET", "/checkd")
+        tempres = temp.getresponse()
+        tempdata=tempres.read()
+        entity = json.loads(tempdata)
+        slave_status[str(sl)]=entity['NoTASKS']
+        temp.close()
          
 @route('/daemondone/:t_ID', method='POST')
 def push_job(t_ID):
@@ -15,4 +25,8 @@ def push_job(t_ID):
         abort(404, 'Wrong cluster?')
     if t_ID!=entity['t_ID']:
         abort(405, 'Some Error')
+
+if __name__="__main__":
+    for sl_ID in slaves:
+        connections[sl_ID]=httplib.HTTPConnection(slaves[sl_ID])
 

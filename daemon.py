@@ -71,15 +71,16 @@ def check_job(t_ID):
 	    except KeyError:#if never pushed
 	    	return_json['RETURN_VAL']='NOTFOUND'
     return return_json
-@route('/checkd/:t_ID', method='GET')
-def check_daemon(t_ID):
+@route('/checkd', method='GET')
+def check_daemon():
     return_json={}
-    return_json['t_ID']=str(t_ID)
+    return_json['d_ID']=str(d_ID)
     if job_popens_live=={}:
         return_json["NoTASKS"]=0
     else:
         return_json["NoTASKS"]=len(job_popens_live)
-        
+    return return_json
+
 
 
 
