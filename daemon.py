@@ -39,10 +39,10 @@ def push_job():
     if not data:
         abort(400, 'No data received')
     entity = json.loads(data)
-    if (entity['d_ID'] != d_ID )
+    if (entity['d_ID'] != d_ID ):
         abort(404, 'Wrong Daemon')
 
-    if (entity['c_ID'] != c_ID )
+    if (entity['c_ID'] != c_ID ):
         abort(404, 'Wrong cluster?')
     t_ID=entity['t_ID'] #task id
     noofargs=entity['NumArgs']
