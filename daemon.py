@@ -53,7 +53,7 @@ def push_job():
     jobT=jobThread(jobargs,t_ID)
     jobT.start()
 
-@route('/check/:t_ID', method='GET')
+@route('/checktask/:t_ID', method='GET')
 def check_job(t_ID):
     return_json={}
     return_json['t_ID']=str(t_ID)
@@ -71,4 +71,16 @@ def check_job(t_ID):
 	    except KeyError:#if never pushed
 	    	return_json['RETURN_VAL']='NOTFOUND'
     return return_json
+@route('/checkd/:t_ID', method='GET')
+def check_daemon(t_ID):
+    return_json={}
+    return_json['t_ID']=str(t_ID)
+    if job_popens_live=={}:
+        return_json["NoTASKS"]=0
+    else:
+        return_json["NoTASKS"]=len(job_popens_live)
+        
+
+
+
 
