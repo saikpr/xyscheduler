@@ -3,6 +3,8 @@ import threading
 from bottle import route, run, request, abort
 from xyvar import hostname,d_ID,c_ID
 import subprocess 
+job_popens_all={}
+job_popens_live={}
 class jobThread(threading.Thread):
      def __init__(self,jobargs,t_ID):
         threading.Thread.__init__(self)
@@ -22,12 +24,16 @@ class jobThread(threading.Thread):
                                     universal_newlines=False,
                                     startupinfo=None,
                                     creationflags=0)
+        job_popens_all[str(t_ID)]+=job_popen
+        job_popens_live[str(t_ID)]+=job_popen
+
         job_popen.wait()
+        del job_popens_live[str(t_ID)]
         ##call /daemon complete on master
         fileoutput.close()
          
-@route('/run', method='POST')
-def run_job():
+@route('/push', method='POST')
+def push_job():
     data = request.body.readline().decode('utf-8')
     print data
     print type(data)
@@ -48,4 +54,21 @@ def run_job():
     jobT=jobThread(jobargs,t_ID)
     jobT.start()
 
+@route('/check/:t_ID', method='GET')
+def check_job(t_ID):
+    return_json={}
+    return_json['t_ID']=str(t_ID)
+    try:
+    	job_check=job_popens_live[str(t_ID)]
+    	return_val=job_check.poll()
+    	if return_val==None:
+    		return_json['RETURN_VAL']="INCOMPLETE"
+    except KeyError:
+    	try:
+    		job_check=job_popens_live[str(t_ID)]
+    		return_val=job_check.poll()
+	    	if return_val!=None:
+	    		return_json['RETURN_VAL']=return_val
+	    except KeyError:
+	    	return_json['RETURN_VAL']='NOTFOUND'
 
