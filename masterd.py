@@ -1,6 +1,6 @@
 import json
 from bottle import route, run, request, abort
-from xyvar import hostname,d_ID,c_ID,md_ID
+from xyvar import hostname,d_ID,c_ID,md_ID,slaves
 import subprocess 
 
          
