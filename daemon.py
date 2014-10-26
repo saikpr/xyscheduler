@@ -13,7 +13,7 @@ class jobThread(threading.Thread):
         self.t_ID=t_ID
 
      def run(self):
-        global job_popens_all,job_popens_live
+        global job_popens_all,job_popens_live,master_connect
         fileoutput=open(str(t_ID)+'.output','w')
         job_popen = subprocess.Popen(jobargs
                                     bufsize=-1,
@@ -66,6 +66,7 @@ def push_job():
 
 @route('/checktask/:t_ID', method='GET')
 def check_job(t_ID):
+    global job_popens_live
     return_json={}
     return_json['t_ID']=str(t_ID)
     try: #check if it is running
@@ -84,6 +85,7 @@ def check_job(t_ID):
     return return_json
 @route('/checkd', method='GET')
 def check_daemon():
+    global job_popens_live
     return_json={}
     return_json['d_ID']=str(d_ID)
     if job_popens_live=={}:

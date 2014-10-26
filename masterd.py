@@ -1,6 +1,6 @@
 import json, httplib
 from bottle import route, run, request, abort
-from xyvar import hostname,d_ID,c_ID,md_ID,slaves
+from xyvar import hostname,d_ID,c_ID,md_ID,slaves,daemon_Port
 import subprocess 
 connections={}
 slave_status={}
