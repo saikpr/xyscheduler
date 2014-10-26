@@ -1,10 +1,11 @@
-import json
+import json, httplib
 import threading
 from bottle import route, run, request, abort
-from xyvar import hostname,d_ID,c_ID
+from xyvar import hostname,d_ID,c_ID,master_ip,master_Port
 import subprocess 
 job_popens_all={}
 job_popens_live={}
+master_connect=httplib.HTTPConnection(master_ip,master_Port)
 class jobThread(threading.Thread):
      def __init__(self,jobargs,t_ID):
         threading.Thread.__init__(self)
@@ -12,6 +13,7 @@ class jobThread(threading.Thread):
         self.t_ID=t_ID
 
      def run(self):
+        global job_popens_all,job_popens_live
         fileoutput=open(str(t_ID)+'.output','w')
         job_popen = subprocess.Popen(jobargs
                                     bufsize=-1,
@@ -30,6 +32,15 @@ class jobThread(threading.Thread):
         del job_popens_live[str(t_ID)]
         ##call /daemon complete on master
         fileoutput.close()
+        return_json={}
+        return_json['t_ID']=str(t_ID)
+        return_json['d_ID']=str(d_ID)
+        return_json['c_ID']=str(c_ID)
+        return_json['RETURN_VAL']=job_popen.poll()
+        temp=master_connect.request("POST", "/daemondone/"+str(t_ID),return_json)
+        tempres = temp.getresponse()
+        temp.close()
+
          
 @route('/push', method='POST')
 def push_job():

@@ -35,5 +35,5 @@ def push_job(t_ID):
 
 if __name__="__main__":
     for sl_ID in slaves:
-        connections[sl_ID]=httplib.HTTPConnection(slaves[sl_ID])
+        connections[sl_ID]=httplib.HTTPConnection(slaves[sl_ID],daemon_Port)
 
