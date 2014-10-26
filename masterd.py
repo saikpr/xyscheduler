@@ -4,6 +4,10 @@ from xyvar import hostname,d_ID,c_ID,md_ID,slaves
 import subprocess 
 connections={}
 slave_status={}
+live_jobs={}
+completed_jobs_d={}
+completed_jobs_status={}
+remaining_jobs={}
 def check_slaves():
     for sl in slaves:
         temp=connections[sl].request("GET", "/checkd")
@@ -25,6 +29,9 @@ def push_job(t_ID):
         abort(404, 'Wrong cluster?')
     if t_ID!=entity['t_ID']:
         abort(405, 'Some Error')
+    del live_jobs[str(t_ID)]
+    completed_jobs_d[str(t_ID)]=entity('d_ID')
+    completed_jobs_status[str(t_ID)]=entity('RETURN_VAL')
 
 if __name__="__main__":
     for sl_ID in slaves:
