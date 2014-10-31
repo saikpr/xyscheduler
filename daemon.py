@@ -45,8 +45,8 @@ class jobThread(threading.Thread): #this is a job thread which runs to
 @route('/push', method='POST')
 def push_job():
     data = request.body.readline().decode('utf-8')
-    print data
-    print type(data)
+    #print data
+    #print type(data)
     if not data:
         abort(400, 'No data received')
     entity = json.loads(data)
@@ -74,13 +74,13 @@ def check_job(t_ID):
     	return_val=job_check.poll()
     	if return_val==None:
     		return_json['RETURN_VAL']="INCOMPLETE"
-    except KeyError:#if not runnning or never pushed
+    except KeyError:#if not runnning or never pushed i.e. the key does not exit
     	try:
     		job_check=job_popens_live[str(t_ID)]
     		return_val=job_check.poll()
 	    	if return_val!=None:
 	    		return_json['RETURN_VAL']=return_val
-	    except KeyError:#if never pushed
+	    except KeyError:#if never pushed i.e. the key does not exit
 	    	return_json['RETURN_VAL']='NOTFOUND'
     return return_json
 @route('/checkd', method='GET')
