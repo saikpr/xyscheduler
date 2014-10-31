@@ -1,7 +1,8 @@
-import json, httplib
+import json, httplib, time
 from bottle import route, run, request, abort
 from xyvar import hostname,d_ID,c_ID,md_ID,slaves,daemon_Port
 import subprocess 
+tempmd5=hashlib.md5()
 connections={}
 slave_status={}
 live_jobs={}
@@ -44,7 +45,13 @@ def add_job(t_ID):
     entity = json.loads(data)
     if (entity['c_ID'] != c_ID ):
         abort(404, 'Wrong cluster?')
+    temptime=time.time()
+    global tempmd5
+    tempmd5=hashlib.md5()
+    tempmd5.update(str(temptime))
+    entity['t_ID']=str(tempmd5)
     
+
 
 
 if __name__="__main__":
