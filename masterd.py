@@ -8,7 +8,9 @@ slave_status={}
 live_jobs={}
 completed_jobs_d={}
 completed_jobs_status={}
-remaining_jobs={}
+new_jobs={}
+max_number_tasks=1
+
 def check_slaves():
     for sl in slaves:
         temp=connections[sl].request("GET", "/checkd")
@@ -17,7 +19,18 @@ def check_slaves():
         entity = json.loads(tempdata)
         slave_status[str(sl)]=entity['NoTASKS']
         temp.close()
-         
+
+def jobscheduler():
+	check_slaves()
+	checkstat=False
+	availslave=None
+	for oneslave in slave_status:
+		if 	slave_status[str(oneslave)]<=max_number_tasks:
+			checkstat=True
+			availslave=str(oneslave)
+	if checkstat==False:
+		return -1
+
 @route('/daemondone/:t_ID', method='POST')
 def push_job(t_ID):
 	global completed_jobs_d,live_jobs,completed_jobs_status
@@ -49,7 +62,8 @@ def add_job(t_ID):
     global tempmd5
     tempmd5.update(str(temptime))
     entity['t_ID']=str(tempmd5)
-    
+    new_job[entity['t_ID']]=entity
+
 
 
 
