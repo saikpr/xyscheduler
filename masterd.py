@@ -30,6 +30,12 @@ def jobscheduler():
 			availslave=str(oneslave)
 	if checkstat==False:
 		return -1
+	tempjobid=new_jobs
+	tempjob=new_jobs[str(tempjobid)]
+	tempjob['d_ID']=availslave
+	del new_jobs[str(tempjobid)]
+	live_jobs[str(tempjobid)]=tempjob
+	temp=connections[sl].request("POST", "/push",str(tempjob))
 
 @route('/daemondone/:t_ID', method='POST')
 def push_job(t_ID):
