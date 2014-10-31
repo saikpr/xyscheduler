@@ -3,10 +3,10 @@ import threading
 from bottle import route, run, request, abort
 from xyvar import hostname,d_ID,c_ID,master_ip,master_Port
 import subprocess 
-job_popens_all={}
-job_popens_live={}
-master_connect=httplib.HTTPConnection(master_ip,master_Port)
-class jobThread(threading.Thread):
+job_popens_all=None   #keeps all job popens
+job_popens_live=None  #keeps the live jobs popens
+master_connect=httplib.HTTPConnection(master_ip,master_Port) #create the connection to master
+class jobThread(threading.Thread): #this is a job thread which runs to 
      def __init__(self,jobargs,t_ID):
         threading.Thread.__init__(self)
         self.jobargs=jobargs
@@ -29,7 +29,7 @@ class jobThread(threading.Thread):
         job_popens_all[str(t_ID)]=job_popen
         job_popens_live[str(t_ID)=job_popen
         job_popen.wait()
-        del job_popens_live[str(t_ID)]
+        del job_popens_live[str(t_ID)] #removing the closed jobs
         ##call /daemon complete on master
         fileoutput.close()
         return_json={}
