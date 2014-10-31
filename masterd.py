@@ -19,6 +19,7 @@ def check_slaves():
          
 @route('/daemondone/:t_ID', method='POST')
 def push_job(t_ID):
+	global completed_jobs_d,live_jobs,completed_jobs_status
     data = request.body.readline().decode('utf-8')
     print data
     print type(data)
@@ -32,6 +33,19 @@ def push_job(t_ID):
     del live_jobs[str(t_ID)]
     completed_jobs_d[str(t_ID)]=entity('d_ID')
     completed_jobs_status[str(t_ID)]=entity('RETURN_VAL')
+
+@route('/addjob', method='POST')
+def add_job(t_ID):
+    data = request.body.readline().decode('utf-8')
+    print data
+    print type(data)
+    if not data:
+        abort(400, 'No data received')
+    entity = json.loads(data)
+    if (entity['c_ID'] != c_ID ):
+        abort(404, 'Wrong cluster?')
+    
+
 
 if __name__="__main__":
     for sl_ID in slaves:
