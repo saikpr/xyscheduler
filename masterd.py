@@ -33,15 +33,20 @@ def jobscheduler():
 		if 	slave_status[str(oneslave)]<=max_number_tasks:
 			checkstat=True
 			availslave=str(oneslave)
+			break
+
 	if checkstat==False:
 		return -1
 	tempjobid=new_jobs
 	tempjob=new_jobs[str(tempjobid)]
 	tempjob['d_ID']=availslave
+	tempjob['c_ID']=str(c_ID)
 	del new_jobs[str(tempjobid)]
 	live_jobs[str(tempjobid)]=tempjob
-	temp=connections[sl].request("POST", "/push",str(tempjob))
+	temp=connections[str(availslave)].request("POST", "/push",str(tempjob))
 	tempres = temp.getresponse()
+	entity = json.loads(tempdata)
+	temp.close()
 
 @route('/daemondone/:t_ID', method='POST')
 def push_job(t_ID):
