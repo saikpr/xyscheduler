@@ -47,6 +47,16 @@ def jobscheduler():
 	tempres = temp.getresponse()
 	entity = json.loads(tempdata)
 	temp.close()
+def checkjob(tem_t_ID,tem_d_ID):
+	tempres=None
+	global connections
+	temp=connections[tem_d_ID].request("GET", "/checktask/"+str(tem_t_ID))
+    tempres = temp.getresponse()
+    tempdata=tempres.read()
+    entity = json.loads(tempdata)
+    temp.close()
+    return tempdata['RETURN_VAL']
+
 
 @route('/addjob', method='POST')
 def add_job(t_ID):
