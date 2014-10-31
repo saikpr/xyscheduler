@@ -47,7 +47,7 @@ def jobscheduler():
 	tempres = temp.getresponse()
 	entity = json.loads(tempdata)
 	temp.close()
-	
+
 @route('/addjob', method='POST')
 def add_job(t_ID):
     data = request.body.readline().decode('utf-8')
@@ -80,9 +80,6 @@ def push_job(t_ID):
     del live_jobs[str(t_ID)]
     completed_jobs_d[str(t_ID)]=entity('d_ID')
     completed_jobs_status[str(t_ID)]=entity('RETURN_VAL')
-
-
-
 if __name__="__main__":
     for sl_ID in slaves:
         connections[sl_ID]=httplib.HTTPConnection(slaves[sl_ID],daemon_Port)

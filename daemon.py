@@ -51,7 +51,7 @@ class jobThread(threading.Thread): #this is a job thread which runs to
         tempres = temp.getresponse()
         temp.close()
 
-@route('/checktask/:t_ID', method='GET')
+@route('/checktask/:t_ID', method='GET') # this is to check the task status
 def check_job(t_ID):
     global job_popens_live
     return_json={}
@@ -70,7 +70,7 @@ def check_job(t_ID):
         except KeyError:#if never pushed i.e. the key does not exit
             return_json['RETURN_VAL']='NOTFOUND'
     return return_json       
-@route('/push', method='POST')
+@route('/push', method='POST') # this is for how to push 
 def push_job():
     data = request.body.readline().decode('utf-8')
     #print data
