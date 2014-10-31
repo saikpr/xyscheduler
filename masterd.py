@@ -12,6 +12,7 @@ new_jobs={}
 max_number_tasks=1
 
 def check_slaves():
+	global connections
     for sl in slaves:
         temp=connections[sl].request("GET", "/checkd")
         tempres = temp.getresponse()
@@ -21,6 +22,7 @@ def check_slaves():
         temp.close()
 
 def jobscheduler():
+	global connections,new_jobs,max_number_tasks,slave_status
 	check_slaves()
 	checkstat=False
 	availslave=None
@@ -36,6 +38,7 @@ def jobscheduler():
 	del new_jobs[str(tempjobid)]
 	live_jobs[str(tempjobid)]=tempjob
 	temp=connections[sl].request("POST", "/push",str(tempjob))
+	tempres = temp.getresponse()
 
 @route('/daemondone/:t_ID', method='POST')
 def push_job(t_ID):
