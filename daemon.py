@@ -51,7 +51,25 @@ class jobThread(threading.Thread): #this is a job thread which runs to
         tempres = temp.getresponse()
         temp.close()
 
-         
+@route('/checktask/:t_ID', method='GET')
+def check_job(t_ID):
+    global job_popens_live
+    return_json={}
+    return_json['t_ID']=str(t_ID)
+    try: #check if it is running
+        job_check=job_popens_live[str(t_ID)]
+        return_val=job_check.poll()
+        if return_val==None:
+            return_json['RETURN_VAL']="INCOMPLETE"
+    except KeyError:#if not runnning or never pushed i.e. the key does not exit
+        try:
+            job_check=job_popens_live[str(t_ID)]
+            return_val=job_check.poll()
+            if return_val!=None:
+                return_json['RETURN_VAL']=return_val
+        except KeyError:#if never pushed i.e. the key does not exit
+            return_json['RETURN_VAL']='NOTFOUND'
+    return return_json       
 @route('/push', method='POST')
 def push_job():
     data = request.body.readline().decode('utf-8')
@@ -73,24 +91,3 @@ def push_job():
         jobargs += entity['ARG-'+str(i)]
     jobT=jobThread(jobargs,t_ID)
     jobT.start()
-
-@route('/checktask/:t_ID', method='GET')
-def check_job(t_ID):
-    global job_popens_live
-    return_json={}
-    return_json['t_ID']=str(t_ID)
-    try: #check if it is running
-    	job_check=job_popens_live[str(t_ID)]
-    	return_val=job_check.poll()
-    	if return_val==None:
-    		return_json['RETURN_VAL']="INCOMPLETE"
-    except KeyError:#if not runnning or never pushed i.e. the key does not exit
-    	try:
-    		job_check=job_popens_live[str(t_ID)]
-    		return_val=job_check.poll()
-	    	if return_val!=None:
-	    		return_json['RETURN_VAL']=return_val
-	    except KeyError:#if never pushed i.e. the key does not exit
-	    	return_json['RETURN_VAL']='NOTFOUND'
-    return return_json
-
