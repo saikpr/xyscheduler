@@ -8,3 +8,5 @@ To Do list:
 
 rem job :
 we need to add variable number of jobs for each app
+make the daemon in c and use execv
+
