@@ -93,8 +93,3 @@ def check_daemon(): #it gets the no of tasks running on the job
     else:
         return_json["NoTASKS"]=len(job_popens_live)
     return return_json
-
-
-
-
-
