@@ -47,6 +47,22 @@ def jobscheduler():
 	tempres = temp.getresponse()
 	entity = json.loads(tempdata)
 	temp.close()
+	
+@route('/addjob', method='POST')
+def add_job(t_ID):
+    data = request.body.readline().decode('utf-8')
+    print data
+    print type(data)
+    if not data:
+        abort(400, 'No data received')
+    entity = json.loads(data)
+    if (entity['c_ID'] != c_ID ):
+        abort(404, 'Wrong cluster?')
+    temptime=time.time()
+    global tempmd5
+    tempmd5.update(str(temptime))
+    entity['t_ID']=str(tempmd5)
+    new_job[entity['t_ID']]=entity
 
 @route('/daemondone/:t_ID', method='POST')
 def push_job(t_ID):
@@ -64,24 +80,6 @@ def push_job(t_ID):
     del live_jobs[str(t_ID)]
     completed_jobs_d[str(t_ID)]=entity('d_ID')
     completed_jobs_status[str(t_ID)]=entity('RETURN_VAL')
-
-@route('/addjob', method='POST')
-def add_job(t_ID):
-    data = request.body.readline().decode('utf-8')
-    print data
-    print type(data)
-    if not data:
-        abort(400, 'No data received')
-    entity = json.loads(data)
-    if (entity['c_ID'] != c_ID ):
-        abort(404, 'Wrong cluster?')
-    temptime=time.time()
-    global tempmd5
-    tempmd5.update(str(temptime))
-    entity['t_ID']=str(tempmd5)
-    new_job[entity['t_ID']]=entity
-
-
 
 
 
