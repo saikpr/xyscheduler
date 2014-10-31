@@ -13,7 +13,7 @@ the daemons will communicate between them using http (using bottle)
 
 master daemon will have multiple queues : job remaining, job running, job completed, machine status
 
-once job is added it will first be given a index (say starting from 001) and will be added to the writeahead type log file(easier recovery).
+once job is added it will first be given a index (say starting from md5 of time it started,epoch time) and will be added to the writeahead type log file(easier recovery).
 once job is added it will then be added to a scheduler, queue in this case(implemented using python)
 once a system is ready to run a job, it will added to another log file
 once completed, it will be added to another log file
