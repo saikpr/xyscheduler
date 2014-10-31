@@ -84,7 +84,7 @@ def check_job(t_ID):
 	    	return_json['RETURN_VAL']='NOTFOUND'
     return return_json
 @route('/checkd', method='GET')
-def check_daemon():
+def check_daemon(): #it gets the no of tasks running on the job
     global job_popens_live
     return_json={}
     return_json['d_ID']=str(d_ID)
