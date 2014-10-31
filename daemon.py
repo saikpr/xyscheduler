@@ -6,6 +6,16 @@ import subprocess
 job_popens_all=None   #keeps all job popens
 job_popens_live=None  #keeps the live jobs popens
 master_connect=httplib.HTTPConnection(master_ip,master_Port) #create the connection to master
+@route('/checkd', method='GET')
+def check_daemon(): #it gets the no of tasks running on the job
+    global job_popens_live
+    return_json={}
+    return_json['d_ID']=str(d_ID)
+    if job_popens_live=={}:
+        return_json["NoTASKS"]=0
+    else:
+        return_json["NoTASKS"]=len(job_popens_live)
+    return return_json
 class jobThread(threading.Thread): #this is a job thread which runs to 
      def __init__(self,jobargs,t_ID):
         threading.Thread.__init__(self)
@@ -83,13 +93,4 @@ def check_job(t_ID):
 	    except KeyError:#if never pushed i.e. the key does not exit
 	    	return_json['RETURN_VAL']='NOTFOUND'
     return return_json
-@route('/checkd', method='GET')
-def check_daemon(): #it gets the no of tasks running on the job
-    global job_popens_live
-    return_json={}
-    return_json['d_ID']=str(d_ID)
-    if job_popens_live=={}:
-        return_json["NoTASKS"]=0
-    else:
-        return_json["NoTASKS"]=len(job_popens_live)
-    return return_json
+
