@@ -22,7 +22,10 @@ def check_slaves():
         temp.close()
 
 def jobscheduler():
-	global connections,new_jobs,max_number_tasks,slave_status
+	global connections
+	global new_jobs
+	global max_number_tasks
+	global slave_status
 	check_slaves()
 	checkstat=False
 	availslave=None
