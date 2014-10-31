@@ -47,10 +47,10 @@ def add_job(t_ID):
         abort(404, 'Wrong cluster?')
     temptime=time.time()
     global tempmd5
-    tempmd5=hashlib.md5()
     tempmd5.update(str(temptime))
     entity['t_ID']=str(tempmd5)
     
+
 
 
 
